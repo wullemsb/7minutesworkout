@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#6366f1">
+  <meta name="description" content="7 Minutes Workout — Your daily high-intensity circuit training companion">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="7 Min Workout">
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <title>7 Min Workout</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div id="app">
+
+    <!-- ── HOME SCREEN ─────────────────────────────────────────────────── -->
+    <section id="screen-home" class="screen active" aria-label="Home">
+      <header class="home-header">
+        <div class="app-brand">
+          <span class="brand-number">7</span>
+          <span class="brand-text">MIN<br>WORKOUT</span>
+        </div>
+        <div class="header-actions">
+          <button class="btn-icon" id="btn-audio" aria-label="Toggle audio">🔊</button>
+        </div>
+      </header>
+
+      <div class="streak-row">
+        <div class="streak-pill">
+          <span aria-hidden="true">🔥</span>
+          <span id="streak-count">0</span>
+          <span class="streak-label">day streak</span>
+        </div>
+      </div>
+
+      <div class="stats-grid">
+        <div class="stat-card">
+          <span class="stat-number" id="stat-total">0</span>
+          <span class="stat-label">Total Workouts</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-number" id="stat-week">0</span>
+          <span class="stat-label">This Week</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-number" id="stat-calories">0</span>
+          <span class="stat-label">Kcal Burned</span>
+        </div>
+      </div>
+
+      <div class="section-block">
+        <h2 class="section-title">Today's Exercises</h2>
+        <div class="exercise-chips" id="exercise-chips"></div>
+      </div>
+
+      <div class="start-area">
+        <button class="btn-start" id="btn-start" aria-label="Start 7-minute workout">
+          <span class="btn-start-play" aria-hidden="true">▶</span>
+          <span class="btn-start-label">Start Workout</span>
+          <span class="btn-start-duration">7:00</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- ── WORKOUT SCREEN ──────────────────────────────────────────────── -->
+    <section id="screen-workout" class="screen" aria-label="Workout in progress">
+
+      <!-- Top bar -->
+      <div class="workout-topbar">
+        <button class="btn-icon btn-back" id="btn-back" aria-label="Quit workout">
+          <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">
+            <path d="M20 11H7.83l4.88-4.88c.39-.39.39-1.03 0-1.42-.39-.39-1.02-.39-1.41 0l-6.59 6.59c-.39.39-.39 1.02 0 1.41l6.59 6.59c.39.39 1.02.39 1.41 0 .39-.39.39-1.02 0-1.41L7.83 13H20c.55 0 1-.45 1-1s-.45-1-1-1z" fill="currentColor"/>
+          </svg>
+        </button>
+        <div class="overall-progress-bar" role="progressbar" aria-label="Overall workout progress">
+          <div class="overall-progress-fill" id="workout-progress-fill"></div>
+        </div>
+        <span class="exercise-counter" id="exercise-counter" aria-live="polite">1 / 12</span>
+      </div>
+
+      <!-- Exercise phase -->
+      <div class="workout-phase" id="phase-exercise">
+        <div class="phase-header">
+          <span class="phase-label" id="phase-label">EXERCISE 1 / 12</span>
+          <h2 class="exercise-name" id="exercise-name">Jumping Jacks</h2>
+          <span class="exercise-muscles" id="exercise-muscles">Full Body · Cardio</span>
+        </div>
+
+        <div class="timer-wrapper">
+          <svg class="timer-ring" viewBox="0 0 200 200" aria-hidden="true">
+            <circle class="ring-bg"   cx="100" cy="100" r="88"/>
+            <circle class="ring-fill" id="timer-ring-fill" cx="100" cy="100" r="88"/>
+          </svg>
+          <div class="timer-inner" aria-live="polite" aria-atomic="true">
+            <span class="timer-number" id="timer-number">30</span>
+            <span class="timer-unit">sec</span>
+          </div>
+        </div>
+
+        <div class="exercise-illustration" id="exercise-illustration" aria-hidden="true"></div>
+        <p class="exercise-tips" id="exercise-tips"></p>
+      </div>
+
+      <!-- Rest phase -->
+      <div class="workout-phase hidden" id="phase-rest">
+        <div class="phase-header">
+          <span class="phase-label rest-phase-label">REST</span>
+        </div>
+
+        <div class="timer-wrapper">
+          <svg class="timer-ring" viewBox="0 0 200 200" aria-hidden="true">
+            <circle class="ring-bg rest-bg"     cx="100" cy="100" r="88"/>
+            <circle class="ring-fill rest-fill" id="rest-ring-fill" cx="100" cy="100" r="88"/>
+          </svg>
+          <div class="timer-inner" aria-live="polite" aria-atomic="true">
+            <span class="timer-number" id="rest-timer-number">10</span>
+            <span class="timer-unit">sec</span>
+          </div>
+        </div>
+
+        <div class="next-preview">
+          <span class="next-label">NEXT UP</span>
+          <span class="next-name" id="next-exercise-name">Wall Sit</span>
+          <div class="next-illustration" id="next-illustration" aria-hidden="true"></div>
+        </div>
+      </div>
+
+      <!-- Controls -->
+      <div class="workout-controls">
+        <button class="btn-text" id="btn-skip" aria-label="Skip current exercise">Skip</button>
+        <button class="btn-pause-main" id="btn-pause" aria-label="Pause workout">
+          <svg class="pause-icon" viewBox="0 0 24 24" width="28" height="28" aria-hidden="true">
+            <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" fill="currentColor"/>
+          </svg>
+          <svg class="play-icon hidden" viewBox="0 0 24 24" width="28" height="28" aria-hidden="true">
+            <path d="M8 5v14l11-7z" fill="currentColor"/>
+          </svg>
+        </button>
+        <button class="btn-text btn-stop-text" id="btn-stop" aria-label="Stop workout">Stop</button>
+      </div>
+    </section>
+
+    <!-- ── COMPLETE SCREEN ─────────────────────────────────────────────── -->
+    <section id="screen-complete" class="screen" aria-label="Workout complete">
+      <div class="complete-inner">
+        <div class="trophy" aria-hidden="true">🏆</div>
+        <h2 class="complete-title">Workout Complete!</h2>
+        <p class="complete-subtitle">You crushed it! Great work!</p>
+
+        <div class="complete-stats">
+          <div class="complete-stat">
+            <span class="complete-stat-num" id="complete-time">7:00</span>
+            <span class="complete-stat-lbl">Duration</span>
+          </div>
+          <div class="complete-stat">
+            <span class="complete-stat-num" id="complete-exercises">12</span>
+            <span class="complete-stat-lbl">Exercises</span>
+          </div>
+          <div class="complete-stat">
+            <span class="complete-stat-num" id="complete-calories">~66</span>
+            <span class="complete-stat-lbl">Calories</span>
+          </div>
+        </div>
+
+        <p class="complete-streak" id="complete-streak-info"></p>
+
+        <div class="complete-buttons">
+          <button class="btn-primary" id="btn-do-again">Do It Again</button>
+          <button class="btn-secondary" id="btn-go-home">Back to Home</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── HISTORY SCREEN ─────────────────────────────────────────────── -->
+    <section id="screen-history" class="screen" aria-label="Workout history">
+      <header class="history-header">
+        <h2 class="screen-title">History</h2>
+        <div class="streak-pill small">
+          <span aria-hidden="true">🔥</span>
+          <span id="history-streak-count">0</span>
+          <span>day streak</span>
+        </div>
+      </header>
+
+      <div class="history-summary">
+        <div class="history-stat">
+          <span class="history-stat-num" id="history-total">0</span>
+          <span class="history-stat-lbl">Workouts</span>
+        </div>
+        <div class="history-stat">
+          <span class="history-stat-num" id="history-minutes">0</span>
+          <span class="history-stat-lbl">Minutes</span>
+        </div>
+        <div class="history-stat">
+          <span class="history-stat-num" id="history-best-streak">0</span>
+          <span class="history-stat-lbl">Best Streak</span>
+        </div>
+      </div>
+
+      <div id="calendar-container" aria-label="Workout calendar"></div>
+
+      <div class="workout-list" id="workout-list">
+        <p class="empty-state" id="empty-history">No workouts yet. Start your first workout!</p>
+      </div>
+    </section>
+
+  </div><!-- #app -->
+
+  <!-- Bottom Navigation -->
+  <nav class="bottom-nav" id="bottom-nav" aria-label="Main navigation">
+    <button class="nav-item active" data-screen="home" aria-label="Home tab">
+      <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">
+        <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" fill="currentColor"/>
+      </svg>
+      <span>Home</span>
+    </button>
+    <button class="nav-item" data-screen="history" aria-label="History tab">
+      <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">
+        <path d="M13 3c-4.97 0-9 4.03-9 9H1l3.89 3.89.07.14L9 12H6c0-3.87 3.13-7 7-7s7 3.13 7 7-3.13 7-7 7c-1.93 0-3.68-.79-4.94-2.06l-1.42 1.42C8.27 19.99 10.51 21 13 21c4.97 0 9-4.03 9-9s-4.03-9-9-9zm-1 5v5l4.28 2.54.72-1.21-3.5-2.08V8H12z" fill="currentColor"/>
+      </svg>
+      <span>History</span>
+    </button>
+  </nav>
+
+  <script src="js/exercises.js"></script>
+  <script src="js/audio.js"></script>
+  <script src="js/history.js"></script>
+  <script src="js/workout.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
